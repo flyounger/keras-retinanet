@@ -47,7 +47,10 @@ def default_classification_model(
         'padding'     : 'same',
     }
 
-    inputs  = keras.layers.Input(shape=(None, None, pyramid_feature_size))
+    if keras.backend.image_data_format() == 'channels_first':
+        inputs  = keras.layers.Input(shape=(pyramid_feature_size, None, None))
+    else:
+        inputs  = keras.layers.Input(shape=(None, None, pyramid_feature_size))
     outputs = inputs
     for i in range(4):
         outputs = keras.layers.Conv2D(
@@ -97,7 +100,10 @@ def default_regression_model(num_anchors, pyramid_feature_size=256, regression_f
         'bias_initializer'   : 'zeros'
     }
 
-    inputs  = keras.layers.Input(shape=(None, None, pyramid_feature_size))
+    if keras.backend.image_data_format() == 'channels_first':
+        inputs  = keras.layers.Input(shape=(pyramid_feature_size, None, None))
+    else:
+        inputs  = keras.layers.Input(shape=(None, None, pyramid_feature_size))
     outputs = inputs
     for i in range(4):
         outputs = keras.layers.Conv2D(
